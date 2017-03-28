@@ -71,12 +71,23 @@ function modalSelect($ionicModal, $timeout, $filter, $parse, $templateCache ) {
 				var clearSearchOnSelect = iAttrs.clearSearchOnSelect !== "false" ? true : false;
 				var searchProperties = scope.searchProperties  ? scope.searchProperties : false;
 
+
 				//multiple values settings.
 				var multiple = iAttrs.multiple  ? true : false;
 				if (multiple) {
 						scope.isChecked = {};
 				}
 				var multipleNullValue = iAttrs.multipleNullValue ? scope.$eval(iAttrs.multipleNullValue) : [];
+
+				function checkSelectedMultipleOptions(){
+                    if(multiple){
+                        scope.initialOptions.forEach(function(o){
+                            if(typeof scope.isChecked[o[setFromProperty]] === 'undefined' && o.selected){
+                                scope.isChecked[o[setFromProperty]] = true;
+                            }
+                        });
+                    }
+                }
 
 				scope.ui = {
 					modalTitle : iAttrs.modalTitle || 'Select an option',
@@ -352,6 +363,7 @@ function modalSelect($ionicModal, $timeout, $filter, $parse, $templateCache ) {
 								scope.ui.shortList = shortList;
 							});
 					}
+                    checkSelectedMultipleOptions();
 				});
 
 
